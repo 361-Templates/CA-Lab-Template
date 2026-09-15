@@ -1,5 +1,6 @@
 #include "emp/web/Animate.hpp"
 #include "emp/web/web.hpp"
+#include "emp/math/Random.hpp"
 
 // This hooks into the "target" element in index.html
 // Must be outside of the CAAnimator class for javascript reasons
