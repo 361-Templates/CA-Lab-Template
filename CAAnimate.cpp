@@ -48,58 +48,25 @@ public:
     // But it demonstrates various C++ syntax things!
     int checkLiveNeighbors(int x, int y){
         int count_living = 0;
-        int cell_before = x-1;
-        if(cell_before < 0) cell_before = 0;
-        int cell_after = x + 1;
-        if(cell_after>=num_w_boxes) cell_after = num_w_boxes-1;
-        int cell_above =  y - 1;
-        if (cell_above <0) cell_above = 0;
-        int cell_below = y +1;
-        if (cell_below >= num_h_boxes) {
-            cell_below = num_h_boxes-1;
-        }
 
-        for (int i = cell_before; i <= cell_after; i++) {
-            for (int j= cell_above; j <= cell_below; j++) {
-                if(i!=x || j!=y){
-                    if(cells[i][j]) {
-                        count_living += 1;
-                    }
+        for (int x_diff = -1; x_diff <=1; x_diff++) {
+            for (int y_diff = -1; y_diff <= 1; y_diff++) {
+                if (x_diff ==0 && y_diff == 0) continue; // Skip the focal cell
+
+                int neighbor_x = x + x_diff;
+                int neighbor_y = y + y_diff;
+
+                // Handle wrapping, we could use % but we don't need it
+                if (neighbor_x < 0 ) neighbor_x = num_w_boxes -1;
+                else if (neighbor_x >= num_w_boxes) neighbor_x = 0;
+
+                if (neighbor_y < 0) neighbor_y = num_h_boxes - 1;
+                else if(neighbor_y >= num_h_boxes) neighbor_y = 0;
+
+                // Count it!
+                if (cells[neighbor_x][neighbor_y] == 1) {
+                    count_living += 1;
                 }
-            }
-        }
-
-        //Might have missed some if wrapped
-        if (cell_before == x) {
-            int new_before = num_w_boxes-1;
-            for (int j=cell_above; j <= cell_below; j++){
-                if(cells[new_before][j]) count_living+=1;
-            }
-            if (cell_above == y && cells[new_before][num_h_boxes-1]) {
-                count_living+=1;
-            }
-            else if (cell_below == y && cells[new_before][0]) count_living+=1;
-        }
-        if (cell_after == x) {
-            int new_after = 0;
-            for (int j=cell_above; j<=cell_below; j++) {
-                if(cells[new_after][j]) count_living +=1;
-            }
-            if (cell_above == y && cells[new_after][num_h_boxes-1]) count_living+=1;
-            else if (cell_below == y && cells[new_after][0]) count_living+=1;
-            
-        }
-
-        if (cell_above == y) {
-            int new_above = num_h_boxes -1;
-            for (int i=cell_before; i <= cell_after; i++){
-                if(cells[i][new_above]) count_living +=1;
-            }
-        }
-        if (cell_below == y) {
-            int new_below = 0;
-            for (int i=cell_before; i <= cell_after; i++){
-                if(cells[i][new_below]) count_living +=1;
             }
         }
 
